@@ -1,5 +1,5 @@
 
-#include "../timer.h"
+#include "timer.h"
 
 #include <pico/stdlib.h>
 #include "hardware/timer.h"

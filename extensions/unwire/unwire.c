@@ -12,7 +12,7 @@
 #include <string.h>
 #include <malloc.h>
 
-#include "private/tasks.h"
+#include "tasks.h"
 #include "hal/timer.h"
 #include "hal/smp.h"
 #include "hal/sync.h"

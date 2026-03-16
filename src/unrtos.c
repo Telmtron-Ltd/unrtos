@@ -12,10 +12,10 @@
 #include <string.h>
 
 #include <pico/stdlib.h>
-#include "private/tasks.h"
-#include "hal/timer.h"
-#include "hal/smp.h"
-#include "hal/sync.h"
+#include "tasks.h"
+#include "timer.h"
+#include "smp.h"
+#include "sync.h"
 #include "hardware/watchdog.h"
 
 #define XLOG_LEVEL XLOG_INFO
@@ -64,7 +64,7 @@ void timer_onTick(void) {
     }
     
     // Release fence to ensure all timer decrements are visible before tick increment
-    __mem_fence_release();
+    sync_mem_fence_release();
     _ticks++;
 }
 
@@ -157,7 +157,7 @@ void unrtos_scheduler(int my_core) {
     while(1) {
         timer_wait(my_core);
         // Acquire fence to ensure we see the latest tick count and timer values
-        __mem_fence_acquire();
+        sync_mem_fence_acquire();
         tick_diff = (my_ticks < _ticks) ? (_ticks - my_ticks) : 0;
         if(tick_diff) {
             if(tick_diff > 1) {

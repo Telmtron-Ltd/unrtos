@@ -4,7 +4,7 @@
 #include <stdbool.h>
 
 #include "unrtos_config.h"
-#include "../unrtos_types.h"
+#include "unrtos_types.h"
 
 typedef struct unwire_s {
     void*           data;

@@ -1,4 +1,4 @@
-#include "../smp.h"
+#include "smp.h"
 
 #include <pico/multicore.h>
 #include <hardware/sync.h>
