@@ -1,0 +1,61 @@
+unRTOS Memory Footprint Analysis
+================================
+
+Based on the map file analysis from stickies_block_unrtos.elf.map:
+
+unRTOS Core Components:
+======================
+
+1. unrtos/unrtos.c.obj
+   - Code section: 0x78 bytes (120 bytes)
+   - Data section: 0x93 bytes (147 bytes)
+   - Total: 267 bytes
+
+2. unrtos/hal/rp2040/timer.c.obj
+   - Code section: 0x38 bytes (56 bytes)
+   - Data section: 0x31 bytes (49 bytes)
+   - Total: 105 bytes
+
+3. unrtos/hal/rp2040/smp.c.obj
+   - Code section: 0x28 bytes (40 bytes)
+   - Data section: 0x19 bytes (25 bytes)
+   - Total: 65 bytes
+
+unRTOS Total Memory Usage:
+=========================
+- Flash/Code: 176 bytes (0x78 + 0x38 + 0x28)
+- RAM/Data: 221 bytes (0x93 + 0x31 + 0x19)
+- Total: 397 bytes
+
+Application Tasks Using unRTOS:
+==============================
+
+1. task_display.c.obj
+   - Code: 0x50 bytes (80 bytes)
+   - Data: 0x38 bytes (56 bytes)
+   - Total: 136 bytes
+
+2. task_housekeeper.c.obj
+   - Code: 0xa8 bytes (168 bytes)
+   - Data: 0x93 bytes (147 bytes)
+   - Total: 315 bytes
+
+3. task_blockmap.c.obj
+   - Code: 0xc8 bytes (200 bytes)
+   - Data: 0x12c bytes (300 bytes)
+   - Total: 500 bytes
+
+Summary:
+========
+unRTOS itself uses only 397 bytes total (176 flash + 221 RAM)
+This represents approximately 0.02% of RP2040's 2MB flash and 0.08% of 264KB RAM.
+
+The cooperative scheduler and unWire messaging system provide:
+- Multi-core task coordination
+- Lock-free inter-core messaging
+- Timer-based scheduling
+- Power-efficient operation with WFI
+- Zero-copy message passing
+
+All of this in under 400 bytes - demonstrating exceptional efficiency
+for an embedded real-time operating system alternative.
