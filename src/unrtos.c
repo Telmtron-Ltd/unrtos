@@ -21,8 +21,6 @@
 #define XLOG_LEVEL XLOG_INFO
 #include "util/xprint.h"
 
-// Forward declaration for app_main in main.c
-int app_setup(int core_id);
 
 static volatile bool _running = false;
 static volatile time_t _ticks = 0; 
@@ -31,10 +29,11 @@ static volatile time_t _ticks = 0;
 void unrtos_launch_core(void);
 void unrtos_scheduler(int core_id);
 
-int main(void) {
-    smp_start_core(0, unrtos_launch_core);
+static unrtos_setup_fn_t _unrtos_setup = NULL;
 
-    return 0;
+void unrtos_run(unrtos_setup_fn_t setup_fn) {
+    _unrtos_setup = setup_fn;
+    smp_start_core(0, unrtos_launch_core);
 }
 
 static void __task_watchdog_tick(int core) {
@@ -123,7 +122,7 @@ void unrtos_launch_core(void) {
     int next_core = my_core+1;
 
     /* app_setup must return >= 0 to start the scheduler */
-    if(app_setup(my_core) < 0) {
+    if(!_unrtos_setup || ((*_unrtos_setup)(my_core) < 0)) {
         xprintln(ERR, "Core %d: Error in app_setup. Cannot continue", my_core);
         while(1) { };
     }

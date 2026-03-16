@@ -25,6 +25,9 @@
     void n ## _init(unrtos_task_ctx_t* ctx); \
     volatile void n(void);
 
+typedef int (*unrtos_setup_fn_t)(int core_id);
+
+void unrtos_run(unrtos_setup_fn_t setup_fn);
 unrtos_task_ctx_t* unrtos_add_task(int core_id, task_init_fn_t init, task_fn_t fn, time_t offset, time_t period);
 unrtos_task_ctx_t* unrtos_get_task_ctx(task_fn_t fn);
 time_t unrtos_get_current_ticks(void);
